@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSS Disbursement/Loan Guide</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+* { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; margin:0; padding:0; }
+body { background: #f4f6fb; padding-top: 100px; }
+
+/* NAVBAR */
+.navbar {
+    height: 70px; width: 100%; background: #fff;
+    display: flex; justify-content: center; align-items: center;
+    position: fixed; top: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.15); z-index: 1000;
+}
+.nav-left { display: flex; align-items: center; gap: 12px; }
+.nav-logo { height: 45px; width: auto; }
+.nav-title { font-size: 22px; font-weight: bold; color: #0f4c81; }
+
+/* LEFT-SIDE IMAGE */
+#sideImage {
+    position: fixed;       
+    top: 120px;            
+    left: 120px;            
+    width: 300px;          
+    height: auto;          
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 500;
+}
+
+/* CONTAINER */
+.container {
+    width: 90%; 
+    max-width: 700px;
+    padding: 30px;
+    background: #fff; 
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+    position: absolute;
+    top: 120px;
+    right: 30px; 
+}
+
+/* BACK BUTTON */
+.back-btn {
+    position: absolute; left: 20px; top: 20px;
+    padding: 12px 20px; background: #6c757d; color: #fff;
+    border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
+    font-size: 14px; transition: 0.3s;
+}
+.back-btn:hover { background: #5a6268; }
+
+/* PROGRESS BAR */
+.progress-container {
+    width: 100%;
+    background: #e0e0e0;
+    border-radius: 10px;
+    height: 8px;
+    margin: 50px 0 15px 0;
+}
+.progress-bar {
+    height: 8px;
+    width: 0%;
+    background: #0b5ed7;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+/* STEP CARD */
+.step-card {
+    background: #f0f4ff;
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    animation: fadeIn 0.5s ease;
+    text-align: center;
+}
+.step-card h3 {
+    color: #0f4c81;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+.step-card ol, .step-card ul { padding-left: 25px; text-align: left; display: inline-block; }
+.step-card li { 
+    margin-bottom: 15px; 
+    font-size: 16px; 
+    line-height: 1.6; 
+    display: flex; 
+    align-items: center;
+}
+.step-card li i {
+    margin-right: 12px; 
+    font-size: 22px;
+}
+
+/* ICON COLORS */
+.icon-info { color: #0b5ed7; }
+.icon-success { color: #28a745; }
+.icon-warning { color: #fd7e14; }
+.icon-danger { color: #dc3545; }
+
+/* STEP BUTTONS */
+.step-buttons { display: flex; justify-content: flex-end; margin-top: 30px; gap: 10px; }
+.btn { padding: 12px 25px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+.prev-btn { background: #6c757d; color: #fff; }
+.prev-btn:hover { background: #5a6268; }
+.next-btn { background: #0b5ed7; color: #fff; }
+.next-btn:hover { background: #0a58ca; }
+
+/* MODAL */
+.modal {
+    display: none; position: fixed; z-index: 2000; inset: 0; background: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background: #fff; margin: 15% auto; padding: 30px;
+    border-radius: 10px; max-width: 400px; text-align: center;
+}
+.modal-buttons { margin-top: 25px; display: flex; justify-content: space-around; }
+
+@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+    /* Keep side image hidden on smaller screens */
+    #sideImage { display: none; }
+}
+@media(max-width: 600px) {
+    .back-btn { font-size: 12px; padding: 10px 16px; }
+    .step-card li i { font-size: 18px; }
+    .step-card h3 { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="nav-left">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Social_Security_System_%28SSS%29.svg" class="nav-logo">
+        <span class="nav-title">Social Security System</span>
+    </div>
+</div>
+
+<!-- Left-side Image -->
+<img id="sideImage" src="images/asd.jpg" alt="Step Image">
+
+<div class="container">
+
+    <button class="back-btn" onclick="goBack()">← Back</button>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Step Card -->
+    <div class="step-card">
+        <h3 id="stepTitle"></h3>
+        <ol id="stepContent"></ol>
+    </div>
+
+    <!-- Step Buttons -->
+    <div class="step-buttons">
+        <button class="btn prev-btn" onclick="prevStep()" id="prevBtn">Previous</button>
+        <button class="btn next-btn" onclick="nextStep()" id="nextBtn">Next</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <p>You have completed all steps. Go back to Employee Guides?</p>
+        <div class="modal-buttons">
+            <button class="btn next-btn" onclick="goEmployee()">Yes</button>
+            <button class="btn prev-btn" onclick="closeModal()">No</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentStep = 0;
+
+const steps = [
+    { title: "Step 1: Login & Start", content: "Mag-log in sa iyong My.SSS Account. Sa homepage, pumunta sa Services at sa dropdown list, i-click ang Disbursement Account. Basahin ang mga Paalala bago lagyan ng tsek (✓) at i-click ang Proceed.", image: "images/asd.jpg" },
+    { title: "Step 2: Select Account Type", content: "Pumili kung BANK o E-WALLET/RTC/CPO.", image: "images/asd.jpg" },
+    { title: "Step 3: Get OTP", content: "Pindutin ang 'GET PIN' para makatanggap ng One Time Pin (OTP).", image: "" },
+    { title: "Step 4: Generate PRN", content: "Scroll down sa 'Pay Loans' section at pindutin ang 'Generate a PRN'.", image: "" },
+    { title: "Step 5: Verify Loan Details", content: "I-verify ang loan type at reference number, pagkatapos i-click ang 'GENERATE PIN'.", image: "" },
+    { title: "Step 6: Enter Payment Details", content: "I-enter ang eksaktong buwan.", image: "" },
+    { title: "Step 7: Accept Terms", content: "Lagyan ng tsek (✓) ang 'I accept Terms of Service' at i-click ang Create Account.", image: "" },
+    { title: "Step 8: Confirm Email", content: "Buksan ang email mula sa SSS, pindutin ang 'Click here' para gumawa ng panibagong password at kumpirmahin ang account.", image: "" }
+];
+
+const stepTitle = document.getElementById('stepTitle');
+const stepContent = document.getElementById('stepContent');
+const sideImage = document.getElementById('sideImage');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const progressBar = document.getElementById('progressBar');
+const confirmModal = document.getElementById('confirmModal');
+
+function loadStep() {
+    const step = steps[currentStep];
+    stepTitle.innerHTML = step.title;
+    stepContent.innerHTML = `<li>${step.content}</li>`;
+
+    // Show image if defined for the step
+    if(step.image && step.image !== "") {
+        sideImage.src = step.image;
+        sideImage.style.display = "block";
+    } else {
+        sideImage.style.display = "none";
+    }
+
+    prevBtn.style.display = currentStep === 0 ? 'none' : 'inline-block';
+    nextBtn.innerText = currentStep === steps.length - 1 ? "Finish" : "Next";
+    progressBar.style.width = ((currentStep+1)/steps.length*100) + "%";
+}
+
+function nextStep() {
+    if(currentStep === steps.length - 1) {
+        confirmModal.style.display = 'block';
+        return;
+    }
+    currentStep++;
+    loadStep();
+}
+
+function prevStep() {
+    if(currentStep > 0) currentStep--;
+    loadStep();
+}
+
+function goBack(){ window.history.back(); }
+function goEmployee(){ window.location.href = "daem.html"; }
+function closeModal(){ confirmModal.style.display = 'none'; }
+
+window.onload = loadStep;
+window.onclick = e => { if(e.target === confirmModal) confirmModal.style.display = 'none'; };
+</script>
+
+</body>
+</html>

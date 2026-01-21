@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SSS Maternity Guide</title>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<style>
+* { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; margin:0; padding:0; }
+
+body {
+    background: #f4f6fb;
+    padding-top: 100px;
+}
+
+/* NAVBAR */
+.navbar {
+    height: 70px; width: 100%;
+    background: #fff; display: flex; justify-content: center; align-items: center;
+    position: fixed; top: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.15); z-index: 1000;
+}
+.nav-left { display: flex; align-items: center; gap: 12px; }
+.nav-logo { height: 45px; width: auto; }
+.nav-title { font-size: 22px; font-weight: bold; color: #0f4c81; }
+
+/* MAIN CONTAINER */
+.container {
+    width: 90%; max-width: 900px;
+    margin: 50px auto;  
+    padding: 40px 30px;
+    background: #fff; 
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
+    text-align: left;
+    position: relative;
+}
+
+/* BACK BUTTON */
+.back-btn {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    padding: 10px 18px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.back-btn:hover { background: #5a6268; }
+
+/* PROGRESS BAR */
+.progress-container {
+    width: 100%;
+    background: #e0e0e0;
+    border-radius: 10px;
+    height: 8px; /* Mas mababa kaysa dati */
+    margin: 50px 0 15px 0; /* Bumaba sa back button */
+}
+.progress-bar {
+    height: 8px; /* Mas mababa */
+    width: 0%;
+    background: #0b5ed7;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+/* STEP CARD */
+.step-card {
+    background: #f0f4ff;
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    animation: fadeIn 0.5s ease;
+}
+.step-card h3 {
+    color: #0f4c81;
+    margin-bottom: 15px;
+    font-size: 22px;
+    text-align: center;
+}
+.step-card ul {
+    list-style: none;
+    padding-left: 0;
+}
+.step-card ol {
+    padding-left: 20px;
+}
+.step-card li {
+    margin-bottom: 12px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+.step-card li i {
+    margin-right: 8px;
+}
+
+/* Icon colors */
+.icon-info { color: #0b5ed7; }       /* blue */
+.icon-success { color: #28a745; }    /* green */
+.icon-warning { color: #fd7e14; }    /* orange */
+.icon-danger { color: #dc3545; }     /* red */
+
+/* STEP BUTTONS */
+.step-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+    gap: 10px;
+}
+.btn {
+    padding: 12px 25px; border-radius: 6px;
+    border: none; cursor: pointer; font-weight: bold;
+    transition: 0.3s;
+}
+.prev-btn { background: #6c757d; color: #fff; }
+.prev-btn:hover { background: #5a6268; }
+.next-btn { background: #0b5ed7; color: #fff; }
+.next-btn:hover { background: #0a58ca; }
+
+/* Modal */
+.modal {
+    display: none; position: fixed; z-index: 2000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: #fff; margin: 15% auto;
+    padding: 30px; border-radius: 10px; max-width: 400px;
+    text-align: center;
+}
+.modal-buttons { margin-top: 25px; display: flex; justify-content: space-around; }
+.modal-btn {
+    padding: 10px 25px; border-radius: 6px; border: none;
+    font-weight: bold; cursor: pointer;
+}
+.confirm-btn { background-color: #0b5ed7; color: white; }
+.cancel-btn { background-color: #6c757d; color: white; }
+
+@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+
+@media(max-width:500px) {
+    .step-buttons { flex-direction: column; align-items: flex-end; gap: 15px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <a href="welcome.html" style="text-decoration:none; display:flex; align-items:center;">
+        <div class="nav-left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Social_Security_System_%28SSS%29.svg" alt="SSS Logo" class="nav-logo">
+            <span class="nav-title">Social Security System</span>
+        </div>
+    </a>
+</div>
+
+<div class="container">
+
+    <button class="back-btn" onclick="goBack()">← Back</button>
+
+    <!-- Progress bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="step-card">
+        <h3 id="stepTitle"></h3>
+        <ul id="stepContent"></ul>
+    </div>
+
+    <div class="step-buttons">
+        <button class="btn prev-btn" onclick="prevStep()" id="prevBtn">Previous</button>
+        <button class="btn next-btn" onclick="nextStep()" id="nextBtn">Next</button>
+    </div>
+
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirmModal" class="modal">
+  <div class="modal-content">
+    <p style="font-size: 18px;">You have completed all steps. Go back to Maternity page?</p>
+    <div class="modal-buttons">
+      <button class="modal-btn confirm-btn" onclick="goMaternity()">Yes</button>
+      <button class="modal-btn cancel-btn" onclick="closeModal()">No</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentStep = 0;
+
+const steps = [
+    {
+        title: "Step 1: Create / Log In to My.SSS Account",
+        content: [
+            "<i class='fas fa-globe icon-info'></i> Buksan ang <strong>www.sss.gov.ph</strong> sa iyong browser.",
+            "<i class='fas fa-user icon-info'></i> Log in sa iyong <strong>My.SSS Account</strong> o mag-register kung wala pa."
+        ]
+    },
+    {
+        title: "Step 2: Submit Maternity Notification",
+        content: [
+            "<i class='fas fa-list icon-info'></i> Pumunta sa <strong>Benefits tab</strong>.",
+            "<i class='fas fa-baby icon-warning'></i> Piliin ang <strong>Maternity Notification</strong>.",
+            "<i class='fas fa-calendar icon-warning'></i> Ilagay ang expected delivery date at bilang ng leave days.",
+            "<i class='fas fa-check-circle icon-success'></i> I-submit ang notification at i-save ang confirmation number."
+        ]
+    }
+];
+
+const stepTitle = document.getElementById("stepTitle");
+const stepContent = document.getElementById("stepContent");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const progressBar = document.getElementById("progressBar");
+
+function loadStep() {
+    const step = steps[currentStep];
+    stepTitle.innerHTML = step.title;
+    stepContent.innerHTML = step.content.map(item => `<li>${item}</li>`).join('');
+    prevBtn.style.display = currentStep === 0 ? "none" : "inline-block";
+    nextBtn.innerText = currentStep === steps.length - 1 ? "Finish" : "Next";
+
+    // Update progress bar
+    const progressPercent = ((currentStep+1)/steps.length) * 100;
+    progressBar.style.width = progressPercent + "%";
+}
+
+function nextStep() {
+    if (currentStep === steps.length - 1) {
+        document.getElementById("confirmModal").style.display = "block";
+        return;
+    }
+    currentStep++;
+    loadStep();
+}
+
+function prevStep() {
+    if (currentStep > 0) {
+        currentStep--;
+        loadStep();
+    }
+}
+function goBack() { window.location.href = "maternity.html"; }
+function goMaternity() { window.location.href = "maternity.html"; }
+function closeModal() { document.getElementById("confirmModal").style.display = "none"; }
+
+window.onload = loadStep;
+window.onclick = function(event) {
+    const modal = document.getElementById("confirmModal");
+    if(event.target === modal) modal.style.display = "none";
+};
+</script>
+
+</body>
+</html>
